@@ -2,14 +2,23 @@
 Lab 11 — Configuration & API Key Setup
 """
 import os
+from dotenv import load_dotenv
 
 
 def setup_api_key():
-    """Load Google API key from environment or prompt."""
+    """Load API keys from environment or .env file."""
+    load_dotenv()
+    # google-adk uses GOOGLE_API_KEY for native Gemini/Gemma models.
+    
     if "GOOGLE_API_KEY" not in os.environ:
-        os.environ["GOOGLE_API_KEY"] = input("Enter Google API Key: ")
+        key = os.getenv("GOOGLE_API_KEY")
+        if key:
+            os.environ["GOOGLE_API_KEY"] = key
+        else:
+            print("WARNING: GOOGLE_API_KEY not found in environment or .env")
+
     os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "0"
-    print("API key loaded.")
+    print("API configuration initialized.")
 
 
 # Allowed banking topics (used by topic_filter)
